@@ -42,6 +42,7 @@ import TableHeader from "./TableHeader";
 import TableRow from "./TableRow";
 import Text from "./Text";
 import ToggleBlock from "./ToggleBlock";
+import PlantUMLEditor from "../custom/PlantUMLEditor";
 
 import Video from "./Video";
 
@@ -117,6 +118,7 @@ export const richExtensions: Nodes = [
   MathBlock,
   Mention,
   ToggleBlock,
+  PlantUMLEditor,
   // Container type nodes should be last so that key handlers are registered for content inside
   // the container nodes first.
   ...listExtensions,

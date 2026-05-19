@@ -41,6 +41,20 @@ const Img = styled(Image)`
   height: 18px;
 `;
 
+const ImgDark = styled(Image)<{ $invertable?: boolean }>`
+  border-radius: 3px;
+  margin: 3px;
+  width: 18px;
+  height: 18px;
+
+  ${(props) =>
+    props.$invertable &&
+    props.theme.isDark &&
+    `
+    filter: invert(1);
+  `}
+`;
+
 export default function blockMenuItems(
   t: TFunction,
   documentRef: React.RefObject<HTMLDivElement>
@@ -48,6 +62,15 @@ export default function blockMenuItems(
   const documentWidth = documentRef.current?.clientWidth ?? 0;
 
   const items = [
+    {
+      name: "plantUML_editor",
+      title: t("Plant UML Editor"),
+      icon: <ImgDark src="/images/plantuml.png" alt="PlantUML" />,
+      keywords: "plant plantuml uml editor",
+    },
+    {
+      name: "separator",
+    },
     {
       name: "heading",
       title: t("Big heading"),
