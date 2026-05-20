@@ -167,6 +167,7 @@ export enum IntegrationService {
   Figma = "figma",
   Notion = "notion",
   Markdown = "markdown",
+  PlantUML = "plantUML_editor",
 }
 
 export type ImportableIntegrationService = Extract<
@@ -264,6 +265,9 @@ export type IntegrationSettings<T> = T extends IntegrationType.Embed
         workspace: { id: string; name: string; key: string; logoUrl?: string };
       };
       diagrams?: {
+        url: string;
+      };
+      plantUML_editor?: {
         url: string;
       };
     }

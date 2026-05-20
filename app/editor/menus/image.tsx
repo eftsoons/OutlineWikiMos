@@ -45,13 +45,22 @@ export default function imageMenuItems(
     src: "",
   });
 
+  const isPlantUML = isNodeActive(schema.nodes.image, {
+    source: ImageSource.PlantUML,
+  });
+
+  const isPlantUMLOpenEditor = isNodeActive(schema.nodes.image, {
+    source: ImageSource.PlantUML,
+    editOpen: true,
+  });
+
   return [
     {
       name: "alignLeft",
       tooltip: t("Align left"),
       icon: <AlignImageLeftIcon />,
       active: isLeftAligned,
-      visible: !isEmptyDiagram(state),
+      visible: !isEmptyDiagram(state) && !isPlantUMLOpenEditor(state),
     },
     {
       name: "alignCenter",
@@ -62,21 +71,21 @@ export default function imageMenuItems(
         !isLeftAligned(state) &&
         !isRightAligned(state) &&
         !isFullWidthAligned(state),
-      visible: !isEmptyDiagram(state),
+      visible: !isEmptyDiagram(state) && !isPlantUMLOpenEditor(state),
     },
     {
       name: "alignRight",
       tooltip: t("Align right"),
       icon: <AlignImageRightIcon />,
       active: isRightAligned,
-      visible: !isEmptyDiagram(state),
+      visible: !isEmptyDiagram(state) && !isPlantUMLOpenEditor(state),
     },
     {
       name: "alignFullWidth",
       tooltip: t("Full width"),
       icon: <AlignFullWidthIcon />,
       active: isFullWidthAligned,
-      visible: !isEmptyDiagram(state),
+      visible: !isEmptyDiagram(state) && !isPlantUMLOpenEditor(state),
     },
     {
       name: "separator",
@@ -84,11 +93,20 @@ export default function imageMenuItems(
     {
       name: "dimensions",
       tooltip: `${t("Width")} × ${t("Height")}`,
-      visible: !isFullWidthAligned(state) && !isEmptyDiagram(state),
+      visible:
+        !isFullWidthAligned(state) &&
+        !isEmptyDiagram(state) &&
+        !isPlantUMLOpenEditor(state),
       skipIcon: true,
     },
     {
       name: "separator",
+    },
+    {
+      name: "editPlantUML",
+      tooltip: t("Edit diagram"),
+      icon: <EditIcon />,
+      visible: isPlantUML(state) && !isPlantUMLOpenEditor(state),
     },
     {
       name: "editDiagram",
@@ -100,12 +118,13 @@ export default function imageMenuItems(
       name: "downloadImage",
       tooltip: t("Download image"),
       icon: <DownloadIcon />,
-      visible: !!fetch && !isEmptyDiagram(state),
+      visible:
+        !!fetch && !isEmptyDiagram(state) && !isPlantUMLOpenEditor(state),
     },
     {
       tooltip: t("Replace image"),
       icon: <ReplaceIcon />,
-      visible: !isDiagram(state),
+      visible: !isDiagram(state) && !isPlantUML(state),
       children: [
         {
           name: "replaceImage",

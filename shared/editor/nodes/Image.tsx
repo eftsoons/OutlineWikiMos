@@ -22,6 +22,7 @@ import { DiagramPlaceholder } from "../components/DiagramPlaceholder";
 import { addComment } from "../commands/comment";
 import { addLink } from "../commands/link";
 import { commentedImagePlugin } from "../plugins/CommentedImagePlugin";
+import PlantUMLEditor from "../components/PlantUMLEditor";
 
 const imageSizeRegex = /\s=(\d+)?x(\d+)?$/;
 
@@ -127,6 +128,9 @@ export default class Image extends SimpleImage {
         marks: {
           default: undefined,
         },
+        codeSchema: { default: null },
+        typeImg: { default: null },
+        editOpen: { default: null },
       },
       content: "text*",
       marks: "",
@@ -151,6 +155,7 @@ export default class Image extends SimpleImage {
 
             const width = img?.getAttribute("width");
             const height = img?.getAttribute("height");
+
             return {
               src: img?.getAttribute("src"),
               alt: img?.getAttribute("alt"),
@@ -159,6 +164,9 @@ export default class Image extends SimpleImage {
               width: width ? parseInt(width, 10) : undefined,
               height: height ? parseInt(height, 10) : undefined,
               layoutClass,
+              codeSchema: img?.getAttribute("codeSchema"),
+              typeImg: img?.getAttribute("typeImg"),
+              editOpen: img?.getAttribute("editOpen"),
             };
           },
         },
@@ -377,6 +385,45 @@ export default class Image extends SimpleImage {
       commands.editDiagram();
     };
 
+  editSchemaCodeSchema =
+    ({ getPos, view }: ComponentProps) =>
+    (codeSchema: string) => {
+      const { commands } = this.editor;
+      if (!commands.editSchemaCodeSchema) {
+        return;
+      }
+      const pos = getPos();
+      const $pos = view.state.doc.resolve(pos);
+      view.dispatch(view.state.tr.setSelection(new NodeSelection($pos)));
+      commands.editSchemaCodeSchema(codeSchema);
+    };
+
+  editSchemaTypeImg =
+    ({ getPos, view }: ComponentProps) =>
+    (typeImg: string) => {
+      const { commands } = this.editor;
+      if (!commands.editSchemaTypeImg) {
+        return;
+      }
+      const pos = getPos();
+      const $pos = view.state.doc.resolve(pos);
+      view.dispatch(view.state.tr.setSelection(new NodeSelection($pos)));
+      commands.editSchemaTypeImg(typeImg);
+    };
+
+  editSchemaEditOpen =
+    ({ getPos, view }: ComponentProps) =>
+    (editOpen: boolean) => {
+      const { commands } = this.editor;
+      if (!commands.editSchemaEditOpen) {
+        return;
+      }
+      const pos = getPos();
+      const $pos = view.state.doc.resolve(pos);
+      view.dispatch(view.state.tr.setSelection(new NodeSelection($pos)));
+      commands.editSchemaEditOpen(editOpen);
+    };
+
   component = (props: ComponentProps) => {
     if (
       props.node.attrs.source === ImageSource.DiagramsNet &&
@@ -388,6 +435,23 @@ export default class Image extends SimpleImage {
           {...props}
         />
       );
+    }
+
+    if (props.node.attrs.source === ImageSource.PlantUML) {
+      const { codeSchema, typeImg, src } = props.node.attrs;
+
+      if (props.node.attrs.editOpen) {
+        return (
+          <PlantUMLEditor
+            codeSchema={codeSchema}
+            typeImg={typeImg}
+            url={src}
+            editSchemaCodeSchema={this.editSchemaCodeSchema(props)}
+            editSchemaTypeImg={this.editSchemaTypeImg(props)}
+            editSchemaEditOpen={this.editSchemaEditOpen(props)}
+          />
+        );
+      }
     }
 
     return (

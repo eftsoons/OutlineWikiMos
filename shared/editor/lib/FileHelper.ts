@@ -3,6 +3,7 @@ import extract from "png-chunks-extract";
 
 export enum ImageSource {
   DiagramsNet = "diagrams.net",
+  PlantUML = "plantUML",
 }
 
 export default class FileHelper {

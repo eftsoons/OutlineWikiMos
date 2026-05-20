@@ -125,8 +125,7 @@ export default class PlantUMLEditor extends Node {
         <Img
           ref={imgRef}
           alt={"PlantUMLImg"}
-          onClick={handleOpenEditor}
-          $cursor="pointer"
+          // onClick={handleOpenEditor}
           $display={isLoadImg ? "none" : "block"}
           onLoad={() => setIsLoadImg(false)}
         />
@@ -235,10 +234,11 @@ export default class PlantUMLEditor extends Node {
 
     const { codeSchema, typeImg, editOpen } = node.attrs;
 
-    const esc = (str: string) => str.toString()?.replace(/"/g, "&quot;") || "";
-
     state.write(
-      `<div data-code-schema="${esc(codeSchema)}" data-type-img="${esc(typeImg)}" data-edit-open="${esc(editOpen)}"></div>`
+      `<div data-code-schema="${state.esc(
+        (codeSchema || "").replace("\n", "") || "",
+        false
+      )}" data-type-img="${state.esc((typeImg || "").replace("\n", "") || "", false)}" data-edit-open="${state.esc((String(editOpen) || "").replace("\n", "") || "", false)}"></div>`
     );
 
     state.write(`[${codeSchema}](${typeImg})${editOpen}`);
@@ -259,10 +259,9 @@ export default class PlantUMLEditor extends Node {
   }
 }
 
-const Img = styled.img<{ $display?: string; $cursor?: string }>`
+const Img = styled.img<{ $display?: string }>`
   border-radius: 3px;
   width: 100%;
-  cursor: ${(props) => props.$cursor || ""};
   display: ${(props) => props.$display || "block"};
 `;
 
