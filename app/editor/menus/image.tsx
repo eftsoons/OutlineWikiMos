@@ -103,7 +103,7 @@ export default function imageMenuItems(
       name: "separator",
     },
     {
-      name: "editPlantUML",
+      name: "editPlantUMLOpen",
       tooltip: t("Edit diagram"),
       icon: <EditIcon />,
       visible: isPlantUML(state) && !isPlantUMLOpenEditor(state),

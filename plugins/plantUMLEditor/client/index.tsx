@@ -11,7 +11,6 @@ PluginManager.add([
     value: {
       group: "Integrations",
       icon: Icon,
-      description: "test",
       component: createLazyComponent(() => import("./Settings")),
       enabled: (_, user) => user.role === UserRole.Admin,
     },

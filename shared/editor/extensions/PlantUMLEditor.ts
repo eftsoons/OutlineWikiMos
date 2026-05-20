@@ -3,13 +3,21 @@ import Extension from "../lib/Extension";
 import { Command, EditorState, NodeSelection } from "prosemirror-state";
 import { ImageSource } from "../lib/FileHelper";
 import { encode as plantumlEncoder } from "plantuml-encoder";
+import { IntegrationService } from "@shared/types";
+import { Editor } from "~/editor";
 
-const urlPlantUML = "https://img.plantuml.biz/plantuml";
+function getUrlsSrc(editor: Editor, codeSchema: string, typeImg: string) {
+  const integration = editor.props.embeds?.find(
+    (integ) => integ.name === IntegrationService.PlantUML
+  );
 
-function getUrlsSrc(codeSchema: string, typeImg: string) {
+  const settingsUrl =
+    integration?.settings?.plantUML_editor?.url ||
+    "https://img.plantuml.biz/plantuml/";
+
   const codeSchemaEncode = plantumlEncoder(codeSchema);
 
-  return `${urlPlantUML}/${typeImg}/${codeSchemaEncode}`;
+  return `${settingsUrl}${typeImg}/${codeSchemaEncode}`;
 }
 
 export default class PlantUMLEditor extends Extension {
@@ -24,7 +32,6 @@ export default class PlantUMLEditor extends Extension {
           return true;
         }
 
-        //type != "image"?
         const selectedNode = this.getSelectedImageNode(state);
 
         if (!selectedNode) {
@@ -33,10 +40,10 @@ export default class PlantUMLEditor extends Extension {
           const transaction = tr.insert(
             state.selection.from,
             type.create({
-              width: 500,
-              height: 500,
+              width: 320,
+              height: 300,
               source: ImageSource.PlantUML,
-              src: getUrlsSrc("Bob -> Alice", "svg"),
+              src: getUrlsSrc(this.editor, "Bob -> Alice", "svg"),
               codeSchema: "Bob -> Alice",
               typeImg: "svg",
               editOpen: true,
@@ -48,7 +55,7 @@ export default class PlantUMLEditor extends Extension {
 
         return true;
       },
-      editPlantUML: (): Command => (state) => {
+      editPlantUMLOpen: (): Command => (state) => {
         return this.editSchemaEditOpen(state, true);
       },
       editSchemaCodeSchema:
@@ -82,7 +89,7 @@ export default class PlantUMLEditor extends Extension {
       state.tr.setNodeMarkup(state.selection.from, undefined, {
         ...state.selection.node.attrs,
         codeSchema: codeSchema,
-        src: getUrlsSrc(codeSchema, typeImg),
+        src: getUrlsSrc(this.editor, codeSchema, typeImg),
       })
     );
 
@@ -102,7 +109,7 @@ export default class PlantUMLEditor extends Extension {
       state.tr.setNodeMarkup(state.selection.from, undefined, {
         ...state.selection.node.attrs,
         typeImg: typeImg,
-        src: getUrlsSrc(codeSchema, typeImg),
+        src: getUrlsSrc(this.editor, codeSchema, typeImg),
       })
     );
 
@@ -141,31 +148,6 @@ export default class PlantUMLEditor extends Extension {
     }
 
     return;
-  }
-
-  /**
-   * Uploads the plantUML file using the editor's upload handler.
-   *
-   * @param file - the plantUML file to upload.
-   * @returns promise resolving to the uploaded file URL.
-   * @throws Error if no upload handler is configured.
-   */
-  private async uploadPlantUMLUrl(file: string): Promise<string> {
-    const { uploadFile } = this.editor.props;
-    if (!uploadFile) {
-      throw new Error("No upload handler configured");
-    }
-
-    return uploadFile(file);
-  }
-
-  /**
-   * Opens the diagram editor for creating or editing a diagram.
-   *
-   * @param node - the selected image node, if any.
-   */
-  private openDiagramEditor(node?: Node) {
-    const nodeSrc = node?.attrs.src ?? "";
   }
 }
 

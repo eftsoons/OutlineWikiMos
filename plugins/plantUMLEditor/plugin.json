@@ -2,5 +2,5 @@
   "id": "plantUML_editor",
   "name": "PlantUML",
   "description": "Configure a custom PlantUML installation URL for embedding diagrams.",
-  "priority": 30
+  "priority": 101
 }

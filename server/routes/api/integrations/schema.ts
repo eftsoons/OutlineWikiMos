@@ -60,7 +60,12 @@ export const IntegrationsCreateSchema = BaseSchema.extend({
       )
       .or(
         z.object({
-          diagrams: z.object({ url: z.url() }),
+          diagrams: z.object({
+            url: z.url(),
+            queryParams: z.array(
+              z.object({ key: z.string(), value: z.string() })
+            ),
+          }),
         })
       )
       .or(
@@ -81,6 +86,11 @@ export const IntegrationsCreateSchema = BaseSchema.extend({
         })
       )
       .or(z.object({ serviceTeamId: z.string() }))
+      .or(
+        z.object({
+          plantUML_editor: z.object({ url: z.url() }),
+        })
+      )
       .optional(),
   }),
 });
@@ -111,7 +121,12 @@ export const IntegrationsUpdateSchema = BaseSchema.extend({
       )
       .or(
         z.object({
-          diagrams: z.object({ url: z.url() }),
+          diagrams: z.object({
+            url: z.url(),
+            queryParams: z.array(
+              z.object({ key: z.string(), value: z.string() })
+            ),
+          }),
         })
       )
       .or(
@@ -132,6 +147,11 @@ export const IntegrationsUpdateSchema = BaseSchema.extend({
         })
       )
       .or(z.object({ serviceTeamId: z.string() }))
+      .or(
+        z.object({
+          plantUML_editor: z.object({ url: z.url() }),
+        })
+      )
       .optional(),
 
     /** Integration events */

@@ -1789,5 +1789,10 @@
   "Upload": "Загрузить",
   "Site title": "Название сайта",
   "Clear search highlight": "Убрать подсветку поиска",
-  "Plant UML Editor": "Plant UML Editor"
+  "Plant UML Editor": "Plant UML Editor",
+  "Configure a custom PlantUML installation URL to use your own self-hosted instance for render diagrams in your documents.": "Настройте пользовательский URL-адрес установки PlantUML, чтобы использовать свой собственный автономный экземпляр для рендера диаграмм в ваших документах.",
+  "The URL of your PlantUML installation. Leave empty to use the cloud hosted img.plantuml.biz": "URL-адрес вашей установки PlantUML. Оставьте пустым, если вы хотите использовать img.plantuml.biz",
+  "Additional Query parameters": "Дополнительные Query параметры",
+  "You can add additional Query parameters to the original one. request to receive a chart": "Вы можете добавить дополнительные Query параметры к изначальному запросу на получение диаграммы",
+  "Value": "Значение"
 }

@@ -75,12 +75,11 @@ function plantUMLEditor() {
 
   return (
     <IntegrationScene title="Diagrams.net" icon={<Icon />}>
-      <Heading>Diagrams.net</Heading>
-
+      <Heading>PlantUML</Heading>
       <Text as="p" type="secondary">
         <Trans>
-          Configure a custom Diagrams.net installation URL to use your own
-          self-hosted instance for embedding diagrams in your documents.
+          Configure a custom PlantUML installation URL to use your own
+          self-hosted instance for render diagrams in your documents.
         </Trans>
       </Text>
       <form onSubmit={formHandleSubmit(handleSubmit)}>
@@ -88,12 +87,12 @@ function plantUMLEditor() {
           label={t("Installation URL")}
           name="url"
           description={t(
-            "The URL of your Diagrams.net installation. Leave empty to use the cloud hosted app.diagrams.net"
+            "The URL of your PlantUML installation. Leave empty to use the cloud hosted img.plantuml.biz"
           )}
           border={false}
         >
           <Input
-            placeholder="https://app.diagrams.net/"
+            placeholder="https://img.plantuml.biz/plantuml"
             {...register("url", { required: false })}
           />
         </SettingRow>

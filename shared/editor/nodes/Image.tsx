@@ -22,7 +22,7 @@ import { DiagramPlaceholder } from "../components/DiagramPlaceholder";
 import { addComment } from "../commands/comment";
 import { addLink } from "../commands/link";
 import { commentedImagePlugin } from "../plugins/CommentedImagePlugin";
-import PlantUMLEditor from "../components/PlantUMLEditor";
+import PlantUMLEditor from "../custom/PlantUmlEditor";
 
 const imageSizeRegex = /\s=(\d+)?x(\d+)?$/;
 
@@ -438,9 +438,9 @@ export default class Image extends SimpleImage {
     }
 
     if (props.node.attrs.source === ImageSource.PlantUML) {
-      const { codeSchema, typeImg, src } = props.node.attrs;
-
       if (props.node.attrs.editOpen) {
+        const { codeSchema, typeImg, src } = props.node.attrs;
+
         return (
           <PlantUMLEditor
             codeSchema={codeSchema}
@@ -449,6 +449,7 @@ export default class Image extends SimpleImage {
             editSchemaCodeSchema={this.editSchemaCodeSchema(props)}
             editSchemaTypeImg={this.editSchemaTypeImg(props)}
             editSchemaEditOpen={this.editSchemaEditOpen(props)}
+            editor={this.editor}
           />
         );
       }

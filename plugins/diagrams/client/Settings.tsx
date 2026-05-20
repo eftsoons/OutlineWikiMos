@@ -32,6 +32,10 @@ function DiagramsNet() {
   }) as Integration<IntegrationType.Embed> | undefined;
 
   const url = integration?.settings.diagrams?.url;
+  const queryParamsSettings = integration?.settings.diagrams?.queryParams || [];
+
+  const [queryParams, setQueryParams] =
+    React.useState<{ key: string; value: string }[]>(queryParamsSettings);
 
   const {
     register,
@@ -61,6 +65,7 @@ function DiagramsNet() {
           settings: {
             diagrams: {
               url: data.url.replace(/\/?$/, "/"),
+              queryParams: queryParams,
             },
           } as Integration<IntegrationType.Embed>["settings"],
         });
@@ -70,8 +75,20 @@ function DiagramsNet() {
         toast.error(err.message);
       }
     },
-    [integrations, integration, t]
+    [integrations, integration, t, queryParams]
   );
+
+  const onChangeInputKey = (key: string, index: number) => {
+    setQueryParams((prev) =>
+      prev.map((query, i) => (i === index ? { ...query, key } : query))
+    );
+  };
+
+  const onChangeInputValue = (value: string, index: number) => {
+    setQueryParams((prev) =>
+      prev.map((query, i) => (i === index ? { ...query, value } : query))
+    );
+  };
 
   return (
     <IntegrationScene title="Diagrams.net" icon={<Icon />}>
@@ -97,13 +114,52 @@ function DiagramsNet() {
             {...register("url", { required: false })}
           />
         </SettingRow>
-
+        <Label as="h3">{t("Additional Query parameters")}</Label>
+        <Text as="p" type="secondary">
+          <Trans>
+            You can add additional Query parameters to the original one. request
+            to receive a chart
+          </Trans>
+        </Text>
+        {queryParams.map(({ key, value }, index) => (
+          <Query key={index}>
+            <QueryInputs>
+              <Input
+                placeholder={t("Key")}
+                value={key}
+                onChange={(e) => onChangeInputKey(e.target.value, index)}
+              />
+              <Input
+                placeholder={t("Value")}
+                value={value}
+                onChange={(e) => onChangeInputValue(e.target.value, index)}
+              />
+            </QueryInputs>
+            <Button
+              hideIcon
+              onClick={() =>
+                setQueryParams((prev) => prev.filter((_, i) => i !== index))
+              }
+            >
+              {t("Delete")}
+            </Button>
+          </Query>
+        ))}
+        <Button
+          hideIcon
+          onClick={() =>
+            setQueryParams((prev) => [...prev, { key: "", value: "" }])
+          }
+        >
+          {t("Add")}
+        </Button>
         <Actions reverse justify="end" gap={8}>
           <StyledSubmit
             type="submit"
-            disabled={
-              !formState.isDirty || !formState.isValid || formState.isSubmitting
-            }
+            // disabled={
+            //   !formState.isDirty || !formState.isValid || formState.isSubmitting
+            // }
+            disabled={!formState.isValid || formState.isSubmitting}
           >
             {formState.isSubmitting ? `${t("Saving")}…` : t("Save")}
           </StyledSubmit>
@@ -123,12 +179,27 @@ function DiagramsNet() {
   );
 }
 
+const Label = styled(Text)`
+  margin-bottom: 4px;
+`;
+
 const Actions = styled(Flex)`
   margin-top: 8px;
 `;
 
 const StyledSubmit = styled(Button)`
   width: 80px;
+`;
+
+const Query = styled.div`
+  display: flex;
+  justify-content: space-between;
+  witdh: 100%;
+`;
+
+const QueryInputs = styled.div`
+  display: flex;
+  gap: 8px;
 `;
 
 export default observer(DiagramsNet);

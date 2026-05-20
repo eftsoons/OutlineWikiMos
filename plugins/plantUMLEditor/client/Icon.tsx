@@ -1,5 +1,3 @@
-import * as React from "react";
-
 type Props = {
   /** The size of the icon, 24px is default to match standard icons */
   size?: number;
@@ -8,8 +6,8 @@ type Props = {
   className?: string;
 };
 
-function MicrosoftLogo({ size = 24, fill = "currentColor", className }: Props) {
+function PlantUMLLogo({ size = 24, fill = "currentColor", className }: Props) {
   return <></>;
 }
 
-export default MicrosoftLogo;
+export default PlantUMLLogo;

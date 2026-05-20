@@ -250,6 +250,20 @@ const embeds: EmbedDescriptor[] = [
     component: Diagrams,
     visible: false,
   }),
+
+  new EmbedDescriptor({
+    id: "plantUML_editor",
+    title: "plantUMLEditor",
+    name: IntegrationService.PlantUML,
+    keywords: "plant plantuml uml",
+    regexMatch: [
+      /(?:https?:\/\/)?(?:www\.)?editor\.plantuml\.com\/uml\/([a-zA-Z0-9_-]+)([&?].*)?$/i,
+    ],
+    icon: <Img src="/images/plantuml.png" alt="PlantUml" />,
+    component: PlantUmlDiagrams,
+    visible: false,
+  }),
+
   new EmbedDescriptor({
     id: "descript",
     title: "Descript",

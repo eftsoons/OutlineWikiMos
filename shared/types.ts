@@ -201,6 +201,7 @@ export type UserCreatableIntegrationService = Extract<
   | IntegrationService.Matomo
   | IntegrationService.Umami
   | IntegrationService.GitLab
+  | IntegrationService.PlantUML
 >;
 
 export const UserCreatableIntegrationService = {
@@ -210,6 +211,7 @@ export const UserCreatableIntegrationService = {
   Matomo: IntegrationService.Matomo,
   Umami: IntegrationService.Umami,
   GitLab: IntegrationService.GitLab,
+  PlantUML: IntegrationService.PlantUML,
 } as const;
 
 export enum CollectionPermission {
@@ -266,6 +268,7 @@ export type IntegrationSettings<T> = T extends IntegrationType.Embed
       };
       diagrams?: {
         url: string;
+        queryParams: { key: string; value: string }[];
       };
       plantUML_editor?: {
         url: string;
@@ -318,6 +321,10 @@ export type IntegrationSettings<T> = T extends IntegrationType.Embed
                       };
                     };
                     diagrams?: {
+                      url: string;
+                      queryParams: { key: string; value: string }[];
+                    };
+                    plantUML_editor?: {
                       url: string;
                     };
                   }
