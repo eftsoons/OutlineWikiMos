@@ -22,7 +22,7 @@ import { DiagramPlaceholder } from "../components/DiagramPlaceholder";
 import { addComment } from "../commands/comment";
 import { addLink } from "../commands/link";
 import { commentedImagePlugin } from "../plugins/CommentedImagePlugin";
-import PlantUMLEditor from "../custom/PlantUmlEditor";
+import PlantUMLEditor from "../custom/PlantUMLEditor";
 
 const imageSizeRegex = /\s=(\d+)?x(\d+)?$/;
 
