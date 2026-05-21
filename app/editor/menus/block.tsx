@@ -63,15 +63,6 @@ export default function blockMenuItems(
 
   const items = [
     {
-      name: "plantUML_editor",
-      title: t("Plant UML Editor"),
-      icon: <ImgDark src="/images/plantuml.png" alt="PlantUML" />,
-      keywords: "plant plantuml uml editor",
-    },
-    {
-      name: "separator",
-    },
-    {
       name: "heading",
       title: t("Big heading"),
       keywords: "h1 heading1 title",
@@ -259,6 +250,12 @@ export default function blockMenuItems(
     },
     {
       name: "separator",
+    },
+    {
+      name: "plantUML_editor",
+      title: t("Plant UML Diagram"),
+      icon: <ImgDark src="/images/plantuml.png" alt="PlantUML" />,
+      keywords: "plant plantuml uml editor",
     },
     {
       name: "code_block",

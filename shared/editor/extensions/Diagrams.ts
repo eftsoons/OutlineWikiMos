@@ -274,12 +274,18 @@ export default class Diagrams extends Extension {
     const url =
       integration?.settings?.diagrams?.url ?? "https://embed.diagrams.net/";
 
-    const queryParams = integration?.settings?.diagrams?.queryParams || [];
+    const queryParamsIntegration =
+      integration?.settings?.diagrams?.queryParams || [];
+
+    const queryParams = queryParamsIntegration
+      // .filter(({ key, value }) => key != "" && value != "")
+      .map(({ key, value }) => `${key}=${value}`)
+      .join("&");
 
     const uiTheme = this.editor.props.theme.isDark ? "dark" : "atlas";
     return (
       sanitizeUrl(url) +
-      `?embed=1&ui=${uiTheme}&spin=1&modified=unsavedChanges&proto=json&${queryParams.map(({ key, value }) => `${key}=${value}`).join("&")}`
+      `?embed=1&ui=${uiTheme}&spin=1&modified=unsavedChanges&proto=json&${queryParams}`
     );
   }
 
