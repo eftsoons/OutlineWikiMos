@@ -2,7 +2,7 @@ services:
   outline:
     # image: docker.getoutline.com/outlinewiki/outline:latest
     image: outline
-    env_file: ./docker.env
+    env_file: ./.env.docker
     expose:
       - "3000"
     volumes:
@@ -13,38 +13,22 @@ services:
 
   redis:
     image: redis
-    env_file: ./docker.env
-    expose:
-      - "6379"
-    volumes:
-      - ./redis.conf:/redis.conf
-    command: ["redis-server", "/redis.conf"]
-    healthcheck:
-      test: ["CMD", "redis-cli", "ping"]
-      interval: 10s
-      timeout: 30s
-      retries: 3
+    ports:
+      - "127.0.0.1:6379:6379"
+    user: "redis:redis"
 
   postgres:
-    image: postgres:18
-    env_file: ./docker.env
-    expose:
-      - "5432"
-    volumes:
-      - database-data:/var/lib/postgresql
-    healthcheck:
-      test: ["CMD", "pg_isready", "-d", "outline", "-U", "user"]
-      interval: 30s
-      timeout: 20s
-      retries: 3
+    image: postgres
+    ports:
+      - "127.0.0.1:5432:5432"
     environment:
-      POSTGRES_USER: "user"
-      POSTGRES_PASSWORD: "pass"
-      POSTGRES_DB: "outline"
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: pass
+      POSTGRES_DB: outline
+    user: "postgres:postgres"
 
   nginx:
     image: nginx:alpine
-    container_name: local-nginx
     ports:
       - "80:80"
       - "443:443"
@@ -57,6 +41,4 @@ services:
       - ./localhost-key.pem:/etc/nginx/certs/localhost-key.pem:ro
 
 volumes:
-  https-portal-data:
   storage-data:
-  database-data:
