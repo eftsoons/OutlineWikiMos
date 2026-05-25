@@ -32,10 +32,10 @@ function DiagramsNet() {
   }) as Integration<IntegrationType.Embed> | undefined;
 
   const url = integration?.settings.diagrams?.url;
-  const queryParamsSettings = integration?.settings.diagrams?.queryParams || [];
 
-  const [queryParams, setQueryParams] =
-    React.useState<{ key: string; value: string }[]>(queryParamsSettings);
+  const [queryParams, setQueryParams] = React.useState<
+    { key: string; value: string }[]
+  >([]);
 
   const {
     register,
@@ -54,6 +54,18 @@ function DiagramsNet() {
       url,
     });
   }, [reset, url]);
+
+  React.useEffect(() => {
+    const integration = find(integrations.orderedData, {
+      type: IntegrationType.Embed,
+      service: IntegrationService.Diagrams,
+    }) as Integration<IntegrationType.Embed> | undefined;
+
+    const queryParamsSettings =
+      integration?.settings.diagrams?.queryParams || [];
+
+    setQueryParams(queryParamsSettings);
+  }, [integrations]);
 
   const handleSubmit = React.useCallback(
     async (data: FormData) => {
