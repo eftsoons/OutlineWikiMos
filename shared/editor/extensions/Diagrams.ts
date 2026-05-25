@@ -277,16 +277,28 @@ export default class Diagrams extends Extension {
     const queryParamsIntegration =
       integration?.settings?.diagrams?.queryParams || [];
 
-    const queryParams = queryParamsIntegration
-      // .filter(({ key, value }) => key != "" && value != "")
-      .map(({ key, value }) => `${key}=${value}`)
+    const uiTheme = this.editor.props.theme.isDark ? "dark" : "atlas";
+
+    const defaultParams = [
+      { key: "embed", value: "1" },
+      { key: "ui", value: uiTheme },
+      { key: "spin", value: "1" },
+      { key: "modified", value: "unsavedChanges" },
+      { key: "proto", value: "json" },
+    ];
+
+    const uniqueParamsMap = new Map(
+      [...defaultParams, ...queryParamsIntegration].map((param) => [
+        param.key,
+        param.value,
+      ])
+    );
+
+    const queryParamsResponse = Array.from(uniqueParamsMap.entries())
+      .map(([key, value]) => `${key}=${value}`)
       .join("&");
 
-    const uiTheme = this.editor.props.theme.isDark ? "dark" : "atlas";
-    return (
-      sanitizeUrl(url) +
-      `?embed=1&ui=${uiTheme}&spin=1&modified=unsavedChanges&proto=json&${queryParams}`
-    );
+    return sanitizeUrl(url) + queryParamsResponse;
   }
 
   private client: DiagramsNetClient;
