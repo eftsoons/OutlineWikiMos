@@ -298,7 +298,7 @@ export default class Diagrams extends Extension {
       .map(([key, value]) => `${key}=${value}`)
       .join("&");
 
-    return sanitizeUrl(url) + queryParamsResponse;
+    return sanitizeUrl(url) + "?" + queryParamsResponse;
   }
 
   private client: DiagramsNetClient;
