@@ -33,6 +33,7 @@ import {
   deleteDocument,
   leaveDocument,
   permanentlyDeleteDocument,
+  changeDocumentBlockSize,
 } from "~/actions/definitions/documents";
 import { ActiveDocumentSection } from "~/actions/sections";
 import useMobile from "./useMobile";
@@ -118,6 +119,7 @@ export function useDocumentMenuAction({
       deleteDocument,
       permanentlyDeleteDocument,
       leaveDocument,
+      changeDocumentBlockSize,
     ],
     [
       t,

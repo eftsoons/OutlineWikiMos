@@ -21,6 +21,13 @@ export enum Theme {
   System = "system",
 }
 
+export enum DocumentBlockSize {
+  S = "S",
+  M = "M",
+  L = "L",
+  FULL = "Full",
+}
+
 export enum SystemTheme {
   Light = "light",
   Dark = "dark",
@@ -37,6 +44,7 @@ type PersistedData = Pick<
   | "sidebarRightWidth"
   | "sidebarCollapsed"
   | "tocVisible"
+  | "documentBlockSize"
 >;
 
 class UiStore {
@@ -47,6 +55,9 @@ class UiStore {
   // theme represents the users UI preference (defaults to system)
   @observable
   theme: Theme;
+
+  @observable
+  documentBlockSize: DocumentBlockSize;
 
   // themeOverride is set when a theme query parameter is detected, persists for the session
   @observable
@@ -142,6 +153,7 @@ class UiStore {
     this.tocVisible = data.tocVisible;
     this.rightSidebar = data.rightSidebar ?? null;
     this.theme = data.theme || Theme.System;
+    this.documentBlockSize = data.documentBlockSize || DocumentBlockSize.S;
 
     // system theme listeners
     if (window.matchMedia) {
@@ -272,6 +284,16 @@ class UiStore {
     startViewTransition(() => {
       flushSync(() => {
         this.theme = theme;
+        this.persist();
+      });
+    });
+  };
+
+  @action
+  setDocumentBlockSize = (documentBlockSize: DocumentBlockSize) => {
+    startViewTransition(() => {
+      flushSync(() => {
+        this.documentBlockSize = documentBlockSize;
         this.persist();
       });
     });
@@ -470,6 +492,7 @@ class UiStore {
       languagePromptDismissed: this.languagePromptDismissed,
       rightSidebar: this.rightSidebar,
       theme: this.theme,
+      documentBlockSize: this.documentBlockSize,
     };
   }
 

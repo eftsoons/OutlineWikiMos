@@ -39,6 +39,7 @@ import Notices from "./Notices";
 import References from "./References";
 import RevisionViewer from "./RevisionViewer";
 import SharedHeader from "./SharedHeader";
+import { DocumentBlockSize } from "~/stores/UiStore";
 
 type LocationState = {
   title?: string;
@@ -337,14 +338,14 @@ function DocumentScene({
             />
           )}
           <Main
-            fullWidth={document.fullWidth}
+            documentBlockSize={ui.documentBlockSize}
             tocPosition={tocPos}
             style={fullWidthTransformOffsetStyle}
           >
             <React.Suspense
               fallback={
                 <EditorContainer
-                  docFullWidth={document.fullWidth}
+                  documentBlockSize={ui.documentBlockSize}
                   showContents={showContents}
                   tocPosition={tocPos}
                 >
@@ -355,7 +356,7 @@ function DocumentScene({
               <MeasuredContainer
                 name="document"
                 as={EditorContainer}
-                docFullWidth={document.fullWidth}
+                documentBlockSize={ui.documentBlockSize}
                 showContents={showContents}
                 tocPosition={tocPos}
               >
@@ -408,7 +409,7 @@ function DocumentScene({
               </MeasuredContainer>
               {showContents && (
                 <ContentsContainer
-                  docFullWidth={document.fullWidth}
+                  documentBlockSize={ui.documentBlockSize}
                   position={tocPos}
                 >
                   <Contents />
@@ -424,7 +425,7 @@ function DocumentScene({
 }
 
 type MainProps = {
-  fullWidth: boolean;
+  documentBlockSize: DocumentBlockSize;
   tocPosition: TOCPosition | false;
 };
 
@@ -433,34 +434,32 @@ const Main = styled.div<MainProps>`
 
   ${breakpoint("tablet")`
     display: grid;
-    grid-template-columns: ${({ fullWidth, tocPosition }: MainProps) =>
-      fullWidth
+    grid-template-columns: ${({ documentBlockSize, tocPosition }: MainProps) =>
+      documentBlockSize == DocumentBlockSize.FULL
         ? tocPosition === TOCPosition.Left
           ? `${EditorStyleHelper.tocWidth}px minmax(0, 1fr)`
           : `minmax(0, 1fr) ${EditorStyleHelper.tocWidth}px`
-        : `1fr minmax(0, ${`calc(46em + ${EditorStyleHelper.documentGutter})`}) 1fr`};
+        : `1fr minmax(0, ${EditorStyleHelper[documentBlockSize]}) 1fr`};
   `};
 
   ${breakpoint("desktopLarge")`
-    grid-template-columns: ${({ fullWidth, tocPosition }: MainProps) =>
-      fullWidth
+    grid-template-columns: ${({ documentBlockSize, tocPosition }: MainProps) =>
+      documentBlockSize == DocumentBlockSize.FULL
         ? tocPosition === TOCPosition.Left
           ? `${EditorStyleHelper.tocWidth}px minmax(0, 1fr)`
           : `minmax(0, 1fr) ${EditorStyleHelper.tocWidth}px`
-        : `1fr minmax(0, ${`calc(${EditorStyleHelper.documentWidth} + ${EditorStyleHelper.documentGutter})`}) 1fr`};
+        : `1fr minmax(0, ${EditorStyleHelper[documentBlockSize]}) 1fr`};
   `};
 
   @media print {
     display: block;
-    max-width: ${({ fullWidth }: MainProps) =>
-      fullWidth
-        ? `100%`
-        : `calc(${EditorStyleHelper.documentWidth} + ${EditorStyleHelper.documentGutter})`};
+    max-width: ${({ documentBlockSize }: MainProps) =>
+      EditorStyleHelper[documentBlockSize]}};
   }
 `;
 
 type ContentsContainerProps = {
-  docFullWidth: boolean;
+  documentBlockSize: DocumentBlockSize;
   position: TOCPosition | false;
 };
 
@@ -469,8 +468,12 @@ const ContentsContainer = styled.div<ContentsContainerProps>`
     margin-top: calc(44px + 6vh);
 
     grid-row: 1;
-    grid-column: ${({ docFullWidth, position }: ContentsContainerProps) =>
-      position === TOCPosition.Left ? 1 : docFullWidth ? 2 : 3};
+    grid-column: ${({ documentBlockSize, position }: ContentsContainerProps) =>
+      position === TOCPosition.Left
+        ? 1
+        : documentBlockSize == DocumentBlockSize.FULL
+          ? 2
+          : 3};
     justify-self: ${({ position }: ContentsContainerProps) =>
       position === TOCPosition.Left ? "end" : "start"};
   `};
@@ -490,7 +493,7 @@ const PrintContentsContainer = styled.div`
 `;
 
 type EditorContainerProps = {
-  docFullWidth: boolean;
+  documentBlockSize: DocumentBlockSize;
   showContents: boolean;
   tocPosition: TOCPosition | false;
 };
@@ -504,11 +507,11 @@ const EditorContainer = styled.div<EditorContainerProps>`
 
     // Decides the editor column position & span
     grid-column: ${({
-      docFullWidth,
+      documentBlockSize,
       showContents,
       tocPosition,
     }: EditorContainerProps) =>
-      docFullWidth
+      documentBlockSize == DocumentBlockSize.FULL
         ? showContents
           ? tocPosition === TOCPosition.Left
             ? 2

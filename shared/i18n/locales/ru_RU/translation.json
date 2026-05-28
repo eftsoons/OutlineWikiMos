@@ -1795,5 +1795,6 @@
   "Additional Query parameters": "Дополнительные Query параметры",
   "You can add additional Query parameters to the original one. request to receive a chart": "Вы можете добавить дополнительные Query параметры к изначальному запросу на получение диаграммы",
   "Value": "Значение",
-  "Plant UML Diagram": "Plant UML Diagram"
+  "Plant UML Diagram": "Plant UML Diagram",
+  "Document size": "Размер документа"
 }

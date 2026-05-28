@@ -147,4 +147,9 @@ export class EditorStyleHelper {
 
   /** Gutter width for the document (for decorations, etc) */
   static readonly documentGutter = "88px";
+
+  static readonly S = "920px";
+  static readonly M = "1200px";
+  static readonly L = "1600px";
+  static readonly Full = "100%";
 }

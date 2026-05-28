@@ -166,7 +166,7 @@ function DocumentMenu({
               />
             </Style>
           )}
-          {showDisplayOptions && !isMobile && (
+          {/* {showDisplayOptions && !isMobile && (
             <Style>
               <ToggleMenuItem
                 width={26}
@@ -177,7 +177,7 @@ function DocumentMenu({
                 onChange={handleFullWidthToggle}
               />
             </Style>
-          )}
+          )} */}
         </DisplayOptions>
       </>
     );

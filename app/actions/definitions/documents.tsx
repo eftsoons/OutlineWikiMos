@@ -63,6 +63,7 @@ import {
 } from "~/actions";
 import {
   ActiveDocumentSection,
+  DocumentBlock,
   DocumentSection,
   TrashSection,
 } from "~/actions/sections";
@@ -93,6 +94,7 @@ import env from "~/env";
 import { isMac, isWindows } from "@shared/utils/browser";
 import isCloudHosted from "~/utils/isCloudHosted";
 import DocumentMove from "~/components/DocumentExplorer/DocumentMove";
+import { DocumentBlockSize } from "~/stores/UiStore";
 
 const Insights = lazyWithRetry(
   () => import("~/scenes/Document/components/Insights")
@@ -1522,6 +1524,64 @@ export const applyTemplateFactory = ({
     children: actions,
   });
 
+// todo: Добавить перевод в i18n
+export const changeDocumentBlockSizeS = createAction({
+  name: ({ t }) => t("S"),
+  analyticsName: "Change to S documentBlockSize",
+  iconInContextMenu: false,
+  keywords: "width document S",
+  section: DocumentBlock,
+  selected: ({ stores }) => stores.ui.documentBlockSize === DocumentBlockSize.S,
+  perform: ({ stores }) => stores.ui.setDocumentBlockSize(DocumentBlockSize.S),
+});
+
+export const changeDocumentBlockSizeM = createAction({
+  name: ({ t }) => t("M"),
+  analyticsName: "Change to M documentBlockSize",
+  iconInContextMenu: false,
+  keywords: "width document M",
+  section: DocumentBlock,
+  selected: ({ stores }) => stores.ui.documentBlockSize === DocumentBlockSize.M,
+  perform: ({ stores }) => stores.ui.setDocumentBlockSize(DocumentBlockSize.M),
+});
+
+export const changeDocumentBlockSizeL = createAction({
+  name: ({ t }) => t("L"),
+  analyticsName: "Change to L documentBlockSize",
+  iconInContextMenu: false,
+  keywords: "width document L",
+  section: DocumentBlock,
+  selected: ({ stores }) => stores.ui.documentBlockSize === DocumentBlockSize.L,
+  perform: ({ stores }) => stores.ui.setDocumentBlockSize(DocumentBlockSize.L),
+});
+
+export const changeDocumentBlockSizeFull = createAction({
+  name: ({ t }) => t("Full"),
+  analyticsName: "Change to Full documentBlockSize",
+  iconInContextMenu: false,
+  keywords: "width document full",
+  section: DocumentBlock,
+  selected: ({ stores }) =>
+    stores.ui.documentBlockSize === DocumentBlockSize.FULL,
+  perform: ({ stores }) =>
+    stores.ui.setDocumentBlockSize(DocumentBlockSize.FULL),
+});
+
+export const changeDocumentBlockSize = createActionWithChildren({
+  name: ({ t }) => t("Document size"),
+  analyticsName: "Change documentBlockSize",
+  placeholder: ({ t }) => t("Change documentBlockSize to"),
+  icon: ({ stores }) => stores.ui.documentBlockSize,
+  keywords: "documentBlockSize document size block",
+  section: DocumentBlock,
+  children: [
+    changeDocumentBlockSizeS,
+    changeDocumentBlockSizeM,
+    changeDocumentBlockSizeL,
+    changeDocumentBlockSizeFull,
+  ],
+});
+
 export const rootDocumentActions = [
   openDocument,
   archiveDocument,
@@ -1562,4 +1622,5 @@ export const rootDocumentActions = [
   openDocumentInsights,
   openDocumentInDesktop,
   shareDocument,
+  changeDocumentBlockSize,
 ];
