@@ -689,6 +689,15 @@ function Lightbox({ images, activeImage, onUpdate, onClose, readOnly }: Props) {
     editor.commands.editDiagram();
   };
 
+  const handleEditPlantUML = () => {
+    setStatus({
+      lightbox: LightboxStatus.CLOSED,
+      image: null,
+    });
+
+    editor.commands.editPlantUMLOpen();
+  };
+
   return (
     <Dialog.Root open={true}>
       <Dialog.Portal>
@@ -772,6 +781,20 @@ function Lightbox({ images, activeImage, onUpdate, onClose, readOnly }: Props) {
                 neutral
               />
             </Tooltip>
+            {activeImage.source == ImageSource.PlantUML && !readOnly && (
+              <Tooltip content={t("Edit diagram")} placement="bottom">
+                <ActionButton
+                  tabIndex={-1}
+                  disabled={status.image === ImageStatus.ERROR}
+                  onClick={handleEditPlantUML}
+                  aria-label={t("Edit diagram")}
+                  size={32}
+                  icon={<EditIcon />}
+                  borderOnHover
+                  neutral
+                />
+              </Tooltip>
+            )}
             {activeImage.source === ImageSource.DiagramsNet &&
               !Desktop.isElectron() &&
               !readOnly && (
